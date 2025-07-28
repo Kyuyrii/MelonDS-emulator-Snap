@@ -1,0 +1,91 @@
+name: melonds-emulator
+base: core24
+version: '1.0'
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+summary: Nintendo DS and DSi emulator
+description: |
+   melonDS aims at providing fast and accurate Nintendo DS emulation. While it is still a work in progress, it has a pretty solid set of features.
+
+    Nearly complete core (CPU, video, audio, ...)
+    OpenGL renderer, 3D upscaling
+    RTC, microphone, lid close/open
+    Joystick support
+    Savestates
+    Various display position/sizing/rotations modes
+    Work-in-progress Wi-Fi emulation for online connectivity and local multiplayer
+    Experimental emulation of the Nintendo DSi
+    ...and even more is planned!
+
+
+grade: stable
+confinement: strict
+
+apps:
+  melonds-emulator:
+    command: usr/bin/melonDS
+    desktop: usr/applications/melonDS-emulator.desktop
+    extensions:
+      - kde-neon-6
+    plugs:
+      - home
+      - removable-media
+      - gtk-3-themes
+      - icon-themes
+      - desktop
+      - desktop-legacy
+      - x11
+      - opengl
+      - wayland
+      - audio-playback
+      - joystick
+      - screen-inhibit-control
+      - network
+
+plugs:
+  shared-memory:
+    private: true
+
+parts:
+  melonds-emulator:
+    plugin: dump
+    source:
+      - on amd64: https://github.com/melonDS-emu/melonDS/releases/download/1.0/melonDS-ubuntu-x86_64.zip
+    override-build: |
+      craftctl default
+      pwd
+      ls -l
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin/
+      mv -f $CRAFT_PART_INSTALL/melonDS $CRAFT_PART_INSTALL/usr/bin/
+      chmod +x $CRAFT_PART_INSTALL/usr/bin/melonDS
+      chmod 777 $CRAFT_PART_INSTALL/usr/bin/melonDS
+    prime:
+      - usr/bin/melonDS
+
+  launcher:
+    after: [melonds-emulator]
+    plugin: dump
+    source: ./launcher
+    override-build: |
+      craftctl default
+      pwd
+      ls -l
+      mkdir -p $CRAFT_PART_INSTALL/usr/applications
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
+      mv -f $CRAFT_PART_INSTALL/melonDS-emulator.desktop $CRAFT_PART_INSTALL/usr/applications/
+      mv -f $CRAFT_PART_INSTALL/melonDS-emulator.svg $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
+    prime:
+      - usr/applications/melonDS-emulator.desktop
+      - usr/share/icons/hicolor/scalable/apps/melonDS-emulator.svg
+      
+  dependencies:
+    after: [launcher]
+    plugin: nil
+    source: .
+    stage-packages:
+      - libsdl2-2.0-0
+      - libenet7
+    prime:
+      - usr/lib/x86_64-linux-gnu/
