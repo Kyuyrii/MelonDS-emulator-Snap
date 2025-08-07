@@ -27,22 +27,15 @@ apps:
   melonds-emulator:
     command: usr/bin/melonDS
     desktop: usr/applications/melonDS-emulator.desktop
+    common-id: net.kuribo64.melonDS
     extensions:
       - kde-neon-6
     plugs:
       - home
       - removable-media
-      - gtk-3-themes
-      - icon-themes
-      - desktop
-      - desktop-legacy
-      - x11
-      - opengl
-      - wayland
-      - audio-playback
       - joystick
       - screen-inhibit-control
-      - network
+      - bluez
 
 plugs:
   shared-memory:
@@ -59,7 +52,6 @@ parts:
       ls -l
       mkdir -p $CRAFT_PART_INSTALL/usr/bin/
       mv -f $CRAFT_PART_INSTALL/melonDS $CRAFT_PART_INSTALL/usr/bin/
-      chmod +x $CRAFT_PART_INSTALL/usr/bin/melonDS
       chmod 777 $CRAFT_PART_INSTALL/usr/bin/melonDS
     prime:
       - usr/bin/melonDS
@@ -83,7 +75,6 @@ parts:
   dependencies:
     after: [launcher]
     plugin: nil
-    source: .
     stage-packages:
       - libsdl2-2.0-0
       - libenet7
