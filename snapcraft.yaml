@@ -31,10 +31,15 @@ apps:
     extensions:
       - kde-neon-6
     plugs:
+      - unity7
+      - screen-inhibit-control
+      - audio-playback
+      - network
+      - network-bind
       - home
       - removable-media
+      - mount-observe
       - joystick
-      - screen-inhibit-control
       - bluez
 
 plugs:
