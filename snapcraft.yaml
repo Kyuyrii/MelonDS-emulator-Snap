@@ -1,0 +1,78 @@
+name: melonds-emulator
+base: core24
+version: '1.0'
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+summary: Nintendo DS and DSi emulator
+description: |
+   melonDS aims at providing fast and accurate Nintendo DS emulation. While it is still a work in progress, it has a pretty solid set of features.
+
+    Nearly complete core (CPU, video, audio, ...)
+    OpenGL renderer, 3D upscaling
+    RTC, microphone, lid close/open
+    Joystick support
+    Savestates
+    Various display position/sizing/rotations modes
+    Work-in-progress Wi-Fi emulation for online connectivity and local multiplayer
+    Experimental emulation of the Nintendo DSi
+    ...and even more is planned!
+grade: stable
+confinement: strict
+
+apps:
+  melonds-emulator:
+    command: usr/games/melonDS
+    desktop: usr/gui/MelonDS-emulator.desktop
+    common-id: net.kuribo64.melonDS
+    extensions: [kde-neon-6]
+    plugs:
+      - unity7
+      - screen-inhibit-control
+      - audio-playback
+      - network
+      - network-bind
+      - home
+      - removable-media
+      - mount-observe
+      - joystick
+      - bluez
+
+plugs:
+  shared-memory:
+    private: true
+
+parts:
+  melonds:
+    plugin: dump
+    source: https://github.com/melonDS-emu/melonDS/releases/download/1.0/melonDS-ubuntu-x86_64.zip
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/games/
+      mv -f melonDS $CRAFT_PART_INSTALL/usr/games/
+      chmod 777 $CRAFT_PART_INSTALL/usr/games/melonDS
+    prime:
+      - usr/games/melonDS
+
+  launcher:
+    after: [melonds]
+    plugin: nil
+    source: ./launcher
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/gui
+      mv -f MelonDS-emulator.desktop $CRAFT_PART_INSTALL/usr/gui/
+      mv -f MelonDS-emulator.svg $CRAFT_PART_INSTALL/usr/gui/
+    prime:
+      - usr/gui/
+      
+  dependencies:
+    after: [launcher]
+    plugin: nil
+    stage-packages:
+      - libsdl2-2.0-0
+      - libenet7
+      - libdecor-0-0
+    prime:
+      - usr/lib/x86_64-linux-gnu/libSDL2-2.0.so*
+      - usr/lib/x86_64-linux-gnu/libenet.so*
+      - usr/lib/x86_64-linux-gnu/libdecor-0.so*

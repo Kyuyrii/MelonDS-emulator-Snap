@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=MelonDS [NyKyu]
+GenericName=Nintendo DS Emulator
+Comment=A fast and accurate Nintendo DS emulator.
+Exec=${SNAP}/usr/games/melonDS
+Type=Application
+Categories=Game;Emulator;
+Terminal=false
+Icon=${SNAP}/usr/gui/MelonDS-emulator.svg
+MimeType=application/x-nintendo-ds-rom;
+Keywords=emulator;Nintendo;DS;NDS;Nintendo DS;
