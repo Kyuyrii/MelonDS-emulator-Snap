@@ -5,6 +5,9 @@ platforms:
   amd64:
     build-on: [amd64]
     build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
 summary: Nintendo DS and DSi emulator
 description: |
    melonDS aims at providing fast and accurate Nintendo DS emulation. While it is still a work in progress, it has a pretty solid set of features.
@@ -46,7 +49,9 @@ plugs:
 parts:
   melonds:
     plugin: dump
-    source: https://github.com/melonDS-emu/melonDS/releases/download/1.0/melonDS-ubuntu-x86_64.zip
+    source:
+      - on amd64: https://github.com/melonDS-emu/melonDS/releases/download/1.0/melonDS-ubuntu-x86_64.zip
+      - on arm64: https://github.com/melonDS-emu/melonDS/releases/download/1.0/melonDS-ubuntu-aarch64.zip
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/games/
       mv -f melonDS $CRAFT_PART_INSTALL/usr/games/
