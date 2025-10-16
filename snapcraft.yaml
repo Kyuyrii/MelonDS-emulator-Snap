@@ -29,6 +29,9 @@ apps:
     command: usr/games/melonDS
     desktop: usr/gui/MelonDS-emulator.desktop
     common-id: net.kuribo64.melonDS
+    environment:
+      LD_LIBRARY_PATH: $SNAP/kvantum/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
+      QT_PLUGIN_PATH: $SNAP/kvantum/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
     extensions: [kde-neon-6]
     plugs:
       - unity7
@@ -50,9 +53,6 @@ plugs:
     interface: content
     target: $SNAP/kvantum
     default-provider: qt-style-kvantum
-
-environment:
-  QT_PLUGIN_PATH: $SNAP/kvantum/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}
 
 layout:
   /usr/share/color-schemes:
