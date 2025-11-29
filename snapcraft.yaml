@@ -65,8 +65,8 @@ parts:
   melonds:
     plugin: dump
     source:
-      - on amd64: https://github.com/melonDS-emu/melonDS/releases/download/$SNAPCRAFT_PROJECT_VERSION/melonDS-ubuntu-x86_64.zip
-      - on arm64: https://github.com/melonDS-emu/melonDS/releases/download/$SNAPCRAFT_PROJECT_VERSION/melonDS-ubuntu-aarch64.zip
+      - on amd64: https://github.com/melonDS-emu/melonDS/releases/download/$SNAPCRAFT_PROJECT_VERSION/melonDS-$SNAPCRAFT_PROJECT_VERSION-ubuntu-x86_64.zip
+      - on arm64: https://github.com/melonDS-emu/melonDS/releases/download/$SNAPCRAFT_PROJECT_VERSION/melonDS-$SNAPCRAFT_PROJECT_VERSION-ubuntu-aarch64.zip
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/games/
       mv -f melonDS $CRAFT_PART_INSTALL/usr/games/
