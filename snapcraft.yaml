@@ -23,16 +23,17 @@ description: |
     ...and even more is planned!
 grade: stable
 confinement: strict
+icon: melon.svg
 
 apps:
   melonds-emulator:
-    command: usr/games/melonDS
-    desktop: usr/gui/MelonDS-emulator.desktop
+    command: melonDS
+    desktop: net.kuribo64.melonDS.desktop
     common-id: net.kuribo64.melonDS
     environment:
       QT_QPA_PLATFORMTHEME: xdgdesktopportal
-      LD_LIBRARY_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
-      QT_PLUGIN_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
+      LD_LIBRARY_PATH: $SNAP/lxqt-support-core24/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
+      QT_PLUGIN_PATH: $SNAP/lxqt-support-core24/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
     extensions: [kde-neon-6]
     plugs:
       - unity7
@@ -49,44 +50,29 @@ apps:
 plugs:
   shared-memory:
     private: true
-  lxqt-support:
-    content: lxqt-support
+  lxqt-support-core24:
+    content: lxqt-support-core24
     interface: content
-    target: $SNAP/lxqt-support
-    default-provider: lxqt-support
+    target: $SNAP/lxqt-support-core24
+    default-provider: lxqt-support-core24
 
 layout:
   /usr/share/color-schemes:
-    symlink: $SNAP/lxqt-support/usr/share/color-schemes
+    symlink: $SNAP/lxqt-support-core24/usr/share/color-schemes
   /usr/share/Kvantum:
-    symlink: $SNAP/lxqt-support/usr/share/Kvantum
+    symlink: $SNAP/lxqt-support-core24/usr/share/Kvantum
 
 parts:
-  melonds:
+  melonds-app:
     plugin: dump
     source:
       - on amd64: https://github.com/melonDS-emu/melonDS/releases/download/$SNAPCRAFT_PROJECT_VERSION/melonDS-$SNAPCRAFT_PROJECT_VERSION-ubuntu-x86_64.zip
       - on arm64: https://github.com/melonDS-emu/melonDS/releases/download/$SNAPCRAFT_PROJECT_VERSION/melonDS-$SNAPCRAFT_PROJECT_VERSION-ubuntu-aarch64.zip
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/games/
-      mv -f melonDS $CRAFT_PART_INSTALL/usr/games/
-      chmod 777 $CRAFT_PART_INSTALL/usr/games/melonDS
     prime:
-      - usr/games/melonDS
-
-  launcher:
-    after: [melonds]
-    plugin: nil
-    source: ./launcher
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/gui
-      mv -f MelonDS-emulator.desktop $CRAFT_PART_INSTALL/usr/gui/
-      mv -f MelonDS-emulator.svg $CRAFT_PART_INSTALL/usr/gui/
-    prime:
-      - usr/gui/
+      - melonDS
       
   dependencies:
-    after: [launcher]
+    after: [melonds-app]
     plugin: nil
     stage-packages:
       - libsdl2-2.0-0
@@ -96,3 +82,10 @@ parts:
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libSDL2-2.0.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libenet.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor-0.so*
+
+  dot-desktop:
+    after: [dependencies]
+    plugin: dump
+    source: ./dot-desktop
+    prime:
+      - net.kuribo64.melonDS.desktop
