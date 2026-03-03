@@ -50,15 +50,6 @@ apps:
 plugs:
   shared-memory:
     private: true
-  lxqt-support-core24:
-    content: lxqt-support-core24
-    interface: content
-    target: $SNAP/lxqt-support
-    default-provider: lxqt-support-core24
-
-layout:
-  /usr/share/Kvantum:
-    symlink: $SNAP/lxqt-support/usr/share/Kvantum
 
 parts:
   melonds-app:
